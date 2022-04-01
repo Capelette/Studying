@@ -1,0 +1,20 @@
+def fatorial():
+    n = []       
+    total = []
+    
+    for i in range(5):
+        n.append(int(input('Digite o um número:')))
+    i = 0
+    while i < len(n):
+        fat = 1
+        j = n
+        for j in range(1,n[i] + 1):
+            fat = fat * j
+            j = j + 1
+        i = i + 1
+        total.append(fat)
+    return total
+
+def main():
+    print('O fatorial de é:', fatorial())
+main()
