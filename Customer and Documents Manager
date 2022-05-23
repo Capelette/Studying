@@ -1,0 +1,400 @@
+
+
+Considere que podem existir, no máximo, 15 clientes e 30 documentos. Crie um vetor para clientes e outro para documentos.
+
+Crie um menu para a realização de cada uma das operações especificadas a seguir:
+
+** SISTEMA GERENCIADOR DE CLIENTES E DOCUMENTOS **
+
+Cadastrar clientes
+
+Relatório de clientes
+
+Cadastrar documentos
+
+Relatório de documentos
+
+Excluir clientes sem documentos
+
+Excluir documentos individuais pelo número
+
+Excluir documentos por cliente
+
+Excluir documentos por período
+
+Alterar as informações dos clientes
+
+Mostrar o total de documentos de determinado cliente
+
+Sair
+
+Qual opção deseja?
+
+.................................................................................................
+
+Para cada item do menu, desenvolva uma função.
+
+A seguir são apresentados os detalhes de implementação de cada opção do menu:
+
+Cadastrar clientes — não pode existir mais que um cliente com o mesmo código.
+
+Relatório de clientes - listar todos os clientes cadastrados.
+
+Cadastrar documentos — ao cadastrar um documento, se o dia de pagamento for maior que o dia de vencimento, calcular o campo ‘juros’ do registro documentos (5% sobre o valor original do documento).
+
+Relatório de documentos - listar todos os documentos cadastrados.
+
+Excluir clientes — um cliente só poderá ser excluído se não existir nenhum documento associado a ele.
+
+Excluir documentos individuais — por meio de seu número. Caso o documento não exista, o programa deverá mostrar a mensagem "Documento não encontrado".
+
+Excluir documentos por cliente — o programa deverá informar o código do cliente e excluir todos os seus documentos. Caso o cliente não exista, deverá mostrar a mensagem "Cliente não encontrado".
+
+Excluir documentos por período — o programa deverá informar o dia inicial e o dia final e excluir todos os documentos que possuam data de vencimento nesse período.
+
+Alterar as informações sobre os clientes — só NÃO altere o código do cliente.
+
+Mostrar o total de documentos de determinado cliente.
+
+#########################################################################################----------###########################################################################################################
+
+
+class TipoCliente:
+
+    codigo = 0
+    nome = ''        
+    telefone = 0
+
+class TipoDocumento:
+
+    numero = 0
+    codcliente = 0
+    vencimento = 0
+    pagamento = ''
+    valor = 0.0
+    juros = 0.0
+
+def cadastrocliente(): #1
+
+    vet_cliente = []    
+    for i in range(2):        
+        p = TipoCliente()        
+        p.codigo = int(input('Cadastre o código do cliente: '))                   
+        p.nome = input('Cadastre o nome do cliente: ')
+        p.telefone = int(input('Cadastre o telefone do cliente: '))  
+        vet_cliente.append(p)
+        
+    return vet_cliente
+
+def visual_cliente(vet_cliente): #2
+    
+    for i in range(len(vet_cliente)):
+        print('\nCódigo do cliente: ',vet_cliente[i].codigo,'\nNome:',vet_cliente[i].nome,'\nTelefone do cliente: ',vet_cliente[i].telefone,)
+
+def cadastrodoc(): #3
+
+    vet_doc = []
+    for i in range(2):
+        p = TipoDocumento()
+        p.numero = int(input('Cadastre o numero do documento:'))
+        p.codcliente = int(input('informe o código do cliente:'))
+        p.vencimento = int(input('informe a data de vencimento do documento:'))
+        p.pagamento = int(input('informe a data de pagamento do documento:'))
+        p.valor = float(input('Informe o valor do documento: '))        
+        vet_doc.append(p)
+
+    for i in range(2):    
+        if vet_doc[i].pagamento > vet_doc[i].vencimento:
+            p.juros = p.valor + (p.valor * 5 / 100)
+        else:
+            p.juros = p.valor
+
+    return vet_doc
+
+def visual_doc(vet_doc): #4
+    
+    for i in range(len(vet_doc)):
+        print('\nNumero do documento: ',vet_doc[i].numero,'\nCódigo do cliente:',vet_doc[i].codcliente,'\nData de vencimento do documento: ',vet_doc[i].vencimento,
+              '\nData de pagamento do documento: ',vet_doc[i].pagamento,'\nValor: ', vet_doc[i].juros,)
+        
+def excluir(vet_doc,vet_cliente): #5
+    
+    for i in range(len(vet_cliente)):
+        for j in range(len(vet_doc)):
+            if vet_cliente[i].codigo != vet_doc[j].codcliente:
+                posicao = i
+                print('\nConta sem documentos excluida',vet_cliente[i].codigo)
+            else:
+                print('\nTodos clientes tem documento')
+        vet_cliente.pop(posicao)
+    
+    return vet_cliente
+
+def excluir_num(vet_doc,vet_cliente): #6
+
+    num = int(input('\nDigite o numero do documento que deseja excluir: '))
+    for i in range(len(vet_cliente)):
+        for j in range(len(vet_doc)):
+            if vet_doc[i].numero == num:
+                posicao = i
+                print('\nDocumentos excluidos',vet_doc[j].codcliente)
+            else:
+                print('\nNumero não encontrado')
+        vet_doc.pop(posicao)
+    
+    return vet_doc
+
+def excluir_doc_cliente(vet_cliente,vet_doc): #7
+
+    client = int(input('\nDigite o numero do cliente que deseja excluir: '))
+    for i in range(len(vet_cliente)):
+        for j in range(len(vet_doc)):
+            if vet_cliente[i].codigo == client:
+                posicao = i
+                print('\nDocumentos excluidos - cliente',vet_cliente[i].codigo)
+            else:
+                print('\nCliente não encontrado')
+        vet_doc.pop(posicao)
+
+    return vet_cliente
+
+def excluir_doc_periodo(vet_doc): #8
+    doc_aux = []
+    inicial = int(input('\nDigite a data inicial deseja excluir: '))
+    final = int(input('\nDigite a data final deseja excluir: '))
+    for i in range(len(vet_doc)):
+        if vet_doc[i].vencimento <= inicial and vet_doc[i].vencimento >= final:
+            doc_aux.append(vet_doc[i])          
+
+    return doc_aux
+
+def alterar(vet_cliente): #9
+
+    num = int(input('\nDigite o numero do cliente que deseja alterar: '))    
+    for i in range(len(vet_cliente)):
+        if vet_cliente[i].codigo == num:
+            opc = input('\nDeseja alterar nome ou telefone:')
+            if opc == 'nome':
+                vet_cliente[i].nome = input('\nCadastre o novo nome do titular: ')
+            else:
+                vet_cliente[i].telefone = int(input('\nCadastre o novo telefone do titular: '))
+        else:
+            print('\nNumero não encontrado')
+
+    return vet_cliente
+
+def visual_doc_cliente(vet_doc): #10
+
+    num = int(input('\nDigite o numero do cliente que deseja Visualizar os documentos: '))
+    for i in range(len(vet_doc)):
+        if vet_doc[i].codcliente == num:
+            print(len(vet_doc[i].numero))
+            
+def menu():
+
+    mnu = 0
+    print('\n **SISTEMA GERENCIADOR DE CLIENTES E DOCUMENTOS** \n 1 - Cadastrar clientes \n 2 - Relatório de clientes \n 3 - Cadastrar documentos \n 4 - Relatório de documentos'
+    '\n 5 - Excluir clientes sem documentos \n 6 - Excluir documentos individuais pelo número \n 7 - Excluir documentos por cliente \n 8 - Excluir documentos por período'
+    '\n 9 - Alterar as informações dos clientes \n 10 - Mostrar o total de documentos de determinado cliente \n 11 - Sair \n')
+    mnu = int(input('\nQual é a opção deseja?: '))
+
+    return mnu
+
+def main():
+
+    opcao = menu()        
+    while opcao != 11:
+        if opcao == 1:          
+            vet = cadastrocliente()
+        if opcao == 2:
+            visual_cliente(vet)
+        if opcao == 3:          
+            doc = cadastrodoc()
+        if opcao == 4:          
+            doc = visual_doc(doc)
+        if opcao == 5:          
+           vet = excluir()
+        if opcao == 6:          
+            excluir_num()
+        if opcao == 7:          
+            doc = excluir_doc_cliente()
+        if opcao == 8:          
+            doc = excluir_doc_periodo()
+        if opcao == 9:          
+            vet = alterar()
+        if opcao == 10:          
+            visual_doc_cliente()     
+        if opcao == 11:
+            break        
+        opcao = menu()
+
+main()class TipoCliente:
+
+    codigo = 0
+    nome = ''        
+    telefone = 0
+
+class TipoDocumento:
+
+    numero = 0
+    codcliente = 0
+    vencimento = 0
+    pagamento = ''
+    valor = 0.0
+    juros = 0.0
+
+def cadastrocliente(): #1
+
+    vet_cliente = []    
+    for i in range(2):        
+        p = TipoCliente()        
+        p.codigo = int(input('Cadastre o código do cliente: '))                   
+        p.nome = input('Cadastre o nome do cliente: ')
+        p.telefone = int(input('Cadastre o telefone do cliente: '))  
+        vet_cliente.append(p)
+        
+    return vet_cliente
+
+def visual_cliente(vet_cliente): #2
+    
+    for i in range(len(vet_cliente)):
+        print('\nCódigo do cliente: ',vet_cliente[i].codigo,'\nNome:',vet_cliente[i].nome,'\nTelefone do cliente: ',vet_cliente[i].telefone,)
+
+def cadastrodoc(): #3
+
+    vet_doc = []
+    for i in range(2):
+        p = TipoDocumento()
+        p.numero = int(input('Cadastre o numero do documento:'))
+        p.codcliente = int(input('informe o código do cliente:'))
+        p.vencimento = int(input('informe a data de vencimento do documento:'))
+        p.pagamento = int(input('informe a data de pagamento do documento:'))
+        p.valor = float(input('Informe o valor do documento: '))        
+        vet_doc.append(p)
+
+    for i in range(2):    
+        if vet_doc[i].pagamento > vet_doc[i].vencimento:
+            p.juros = p.valor + (p.valor * 5 / 100)
+        else:
+            p.juros = p.valor
+
+    return vet_doc
+
+def visual_doc(vet_doc): #4
+    
+    for i in range(len(vet_doc)):
+        print('\nNumero do documento: ',vet_doc[i].numero,'\nCódigo do cliente:',vet_doc[i].codcliente,'\nData de vencimento do documento: ',vet_doc[i].vencimento,
+              '\nData de pagamento do documento: ',vet_doc[i].pagamento,'\nValor: ', vet_doc[i].juros,)
+        
+def excluir(vet_doc,vet_cliente): #5
+    
+    for i in range(len(vet_cliente)):
+        for j in range(len(vet_doc)): 
+            if vet_cliente[i].codigo != vet_doc[j].codcliente:
+                posicao = i
+                print('\nConta sem documentos excluida',vet_cliente[i].codigo)
+            else:
+                print('\nTodos clientes tem documento')
+        vet_cliente.pop(posicao)
+    
+    return vet_cliente
+
+def excluir_num(vet_doc,vet_cliente): #6
+
+    num = int(input('\nDigite o numero do documento que deseja excluir: '))
+    for i in range(len(vet_cliente)):
+        for j in range(len(vet_doc)): 
+            if vet_doc[i].numero == num:
+                posicao = i
+                print('\nDocumentos excluidos',vet_doc[j].codcliente)
+            else:
+                print('\nNumero não encontrado')
+        vet_doc.pop(posicao)
+    
+    return vet_doc
+
+def excluir_doc_cliente(vet_cliente,vet_doc): #7
+
+    client = int(input('\nDigite o numero do cliente que deseja excluir: '))
+    for i in range(len(vet_cliente)):
+        for j in range(len(vet_doc)):
+            if vet_cliente[i].codigo == client:
+                posicao = i
+                print('\nDocumentos excluidos - cliente',vet_cliente[i].codigo)
+            else:
+                print('\nCliente não encontrado')
+        vet_doc.pop(posicao)
+
+    return vet_cliente
+
+def excluir_doc_periodo(vet_doc): #8
+    doc_aux = []
+    inicial = int(input('\nDigite a data inicial deseja excluir: '))
+    final = int(input('\nDigite a data final deseja excluir: '))
+    for i in range(len(vet_doc)):
+        if vet_doc[i].vencimento <= inicial and vet_doc[i].vencimento >= final:
+            doc_aux.append(vet_doc[i])          
+
+    return doc_aux
+
+def alterar(vet_cliente): #9
+
+    num = int(input('\nDigite o numero do cliente que deseja alterar: '))    
+    for i in range(len(vet_cliente)):
+        if vet_cliente[i].codigo == num:
+            opc = input('\nDeseja alterar nome ou telefone:')
+            if opc == 'nome':
+                vet_cliente[i].nome = input('\nCadastre o novo nome do titular: ')
+            else:
+                vet_cliente[i].telefone = int(input('\nCadastre o novo telefone do titular: '))
+        else:
+            print('\nNumero não encontrado')
+
+    return vet_cliente
+
+def visual_doc_cliente(vet_doc): #10
+
+    num = int(input('\nDigite o numero do cliente que deseja Visualizar os documentos: '))
+    for i in range(len(vet_doc)):
+        if vet_doc[i].codcliente == num:
+            print(len(vet_doc[i].numero))
+            
+def menu():
+
+    mnu = 0
+    print('\n **SISTEMA GERENCIADOR DE CLIENTES E DOCUMENTOS** \n 1 - Cadastrar clientes \n 2 - Relatório de clientes \n 3 - Cadastrar documentos \n 4 - Relatório de documentos'
+    '\n 5 - Excluir clientes sem documentos \n 6 - Excluir documentos individuais pelo número \n 7 - Excluir documentos por cliente \n 8 - Excluir documentos por período'
+    '\n 9 - Alterar as informações dos clientes \n 10 - Mostrar o total de documentos de determinado cliente \n 11 - Sair \n')
+    mnu = int(input('\nQual é a opção deseja?: '))
+
+    return mnu
+
+def main():
+
+    opcao = menu()        
+    while opcao != 11:
+        if opcao == 1:          
+            vet = cadastrocliente()
+        if opcao == 2:
+            visual_cliente(vet)
+        if opcao == 3:          
+            doc = cadastrodoc()
+        if opcao == 4:          
+            doc = visual_doc(doc)
+        if opcao == 5:          
+           vet = excluir()
+        if opcao == 6:          
+            excluir_num()
+        if opcao == 7:          
+            doc = excluir_doc_cliente()
+        if opcao == 8:          
+            doc = excluir_doc_periodo()
+        if opcao == 9:          
+            vet = alterar()
+        if opcao == 10:          
+            visual_doc_cliente()     
+        if opcao == 11:
+            break        
+        opcao = menu()
+
+main()
